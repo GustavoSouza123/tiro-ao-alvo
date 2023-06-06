@@ -1,0 +1,71 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.game {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: #eee;
+}
+
+.ducks {
+    position: absolute;
+    top: 10%;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    width: 100%;
+    height: 30%;
+    background-color: blue;
+    overflow: hidden;
+}
+
+.duck {
+    position: relative;
+    left: -100px;
+    width: 70px;
+    height: 70px;
+    background-color: yellow;
+    animation: duckMove 2s linear infinite;
+}
+
+.gun {
+    position: absolute;
+    bottom: 10%;
+    left: calc(50% - 50px);
+    width: 100px;
+    height: 100px;
+    background-color: #000;
+}
+
+.shot {
+    position: absolute;
+    top: 80%;
+    left: calc(50% - 7px);
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: orange;
+}
+
+@keyframes duckMove {
+    0% {
+        left: -100px;
+    }
+
+    100% {
+        left: 110%;
+    }
+}
