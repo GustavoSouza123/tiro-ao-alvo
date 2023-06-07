@@ -26,7 +26,6 @@
     width: 70px;
     height: 70px;
     background-color: yellow;
-    /* animation: duckMove 2s linear infinite; */
 }
 
 .gun {
@@ -40,20 +39,8 @@
 
 .shot {
     position: absolute;
-    top: 80%;
-    left: calc(50% - 7px);
     width: 14px;
     height: 14px;
     border-radius: 50%;
     background-color: orange;
-}
-
-@keyframes duckMove {
-    0% {
-        left: -100px;
-    }
-
-    100% {
-        left: 110%;
-    }
 }
