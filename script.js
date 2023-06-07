@@ -28,59 +28,87 @@ function duckMove() {
 duckMove();
 
 // shot animation
-let shotAnimation;
-let shotLeft = parseInt((gameWidth/2) - 7);
-let shotTop = parseInt(gameHeight * 0.8);
-c('.shot').style.left = shotLeft + "px";
-c('.shot').style.top = shotTop + "px";
-function shotMove(cursorX, cursorY) {
+
+/*function shotMove(cursorX, cursorY) {
     shotAnimation = setInterval(() => { anim(cursorX, cursorY) }, 1);
     function anim(x, y) {
+        let aux = 0;
+
         if(shotLeft != x-2 && shotLeft != x-1 && shotLeft != x && shotLeft != x+1 && shotLeft != x+2) {
             if(shotLeft > x) shotLeft-=3; else shotLeft+=3;
             c('.shot').style.left = shotLeft + "px";
+            verifyWin();
+        } else {
+            aux++;
         }
 
         if(shotTop != y-2 && shotTop != y-1 && shotTop != y && shotTop != y+1 && shotTop != y+2) {
             if(shotTop > y) shotTop-=3; else shotTop+=3;
             c('.shot').style.top = shotTop + "px";
+            verifyWin();
+        } else {
+            aux++;
         }
 
-        if(shotLeft == x && shotTop == y) {
+        if(aux == 2) {
             clearInterval(shotAnimation);
+            shotAnimation = null;
+            shotLeft = initialShotLeft;
+            shotTop = initialShotTop;
+            c('.shot').style.left = shotLeft + "px";
+            c('.shot').style.top = shotTop + "px";
         }
     }
+}*/
+
+// modify a CSS variable
+function setCSSVariable(variable, value) {
+    c(':root').style.setProperty(variable, value);
 }
 
 // shoot the duck
+let initialShotLeft = parseInt((gameWidth/2) - 7);
+let initialShotTop = parseInt(gameHeight * 0.8);
+let finalShotLeft, finalShotTop, distance, animationTime, shotAnimInterval;
+c('.shot').style.left = initialShotLeft + "px";
+c('.shot').style.top = initialShotTop + "px";
 function shoot() {
-    shotMove(event.clientX-26, event.clientY-26);
-    /*c('.shot').style.left = event.clientX-26 + "px";
-    c('.shot').style.top = event.clientY-26 + "px";*/
+    finalShotLeft = event.clientX-26;
+    finalShotTop = event.clientY-26;
+    distance = initialShotTop - finalShotTop;
+    animationTime = distance / 640;
 
+    setCSSVariable('--initialLeft', (initialShotLeft)+'px');
+    setCSSVariable('--initialTop', (initialShotTop)+'px');
+    setCSSVariable('--finalLeft', (finalShotLeft)+'px');
+    setCSSVariable('--finalTop', (finalShotTop)+'px');
+    c('.shot').classList.add('shotAnimation');
+    c('.shotAnimation').style.animationDuration = animationTime + 's';
+
+    shotAnimInterval = setInterval(verifyWin, 5);
+
+    setTimeout(() => {
+        c('.shot').style.left = initialShotLeft + "px";
+        c('.shot').style.top = initialShotTop + "px";
+        c('.shot').classList.remove('shotAnimation');
+        clearInterval(shotAnimInterval);
+    }, animationTime*1000);
+}
+
+function verifyWin() {
     if(parseInt(c('.shot').style.left) >= parseInt(c('.duck').style.left) && 
     parseInt(c('.shot').style.left) <= parseInt(c('.duck').style.left)+70-15 && 
     parseInt(c('.shot').style.top) >= parseInt(c('.duck').style.top) && 
     parseInt(c('.shot').style.top) <= parseInt(c('.duck').style.top)+70-15) {
         clearInterval(duckAnimation);
     }
-
-    console.log("cursor:")
-    console.log(event.clientX);
-    console.log(event.clientY);
-    console.log("shot:")
-    console.log(c('.shot').style.left);
-    console.log(c('.shot').style.top);
-    console.log("duck:");
-    console.log(c('.duck').style.left);
-    console.log(c('.duck').style.top);
 }
-
 
 /*
 let hit = false;
 while(!hit) {
 
-}*/
+}
+*/
 
 c('body').addEventListener('mousedown', shoot);

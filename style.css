@@ -1,3 +1,10 @@
+:root {
+    --initialLeft: "0px";
+    --initialTop: "0px";
+    --finalLeft: "0px";
+    --finalTop: "0px";
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -42,5 +49,22 @@
     width: 14px;
     height: 14px;
     border-radius: 50%;
-    background-color: orange;
+    background-color: #000;
+}
+
+.shotAnimation {
+    animation: shotAnimation linear;
+    animation-duration: 0s;
+}
+
+@keyframes shotAnimation {
+    0% {
+        left: var(--initialLeft);
+        top: var(--initialTop);
+    }
+
+    100% {
+        left: var(--finalLeft);
+        top: var(--finalTop);
+    }
 }
