@@ -8,29 +8,33 @@ const gameHeight = game.height;
 
 // duck move
 let duckAnimation;
-function duckMove() {
+function duckMove(speed) {
     let initialPos = -100;
     let duckLeft = initialPos;
     c('.duck').style.left = duckLeft + "px";
     c('.duck').style.top = (gameHeight/4.3) + "px";
     duckAnimation = setInterval(anim, 1);
     function anim() {
-        if(duckLeft == gameWidth) {
+        if(duckLeft == gameWidth-2 || duckLeft == gameWidth-1 || duckLeft == gameWidth || duckLeft == gameWidth+1 || duckLeft == gameWidth+2) {
             duckLeft = initialPos;
             c('.duck').style.left = duckLeft + "px";
         } else {
-            duckLeft += 1;
+            duckLeft += speed;
             c('.duck').style.left = duckLeft + "px";
         }
     }
 }
 
-duckMove();
+let speed = 1;
+duckMove(speed);
 
 // modify a CSS variable
 function setCSSVariable(variable, value) {
     c(':root').style.setProperty(variable, value);
 }
+
+// score
+let score = 0;
 
 // shoot the duck
 let initialShotLeft = parseInt((gameWidth/2) - 7);
@@ -54,32 +58,39 @@ function shoot() {
     shotAnimInterval = setInterval(verifyWin, 5);
 
     shotAnimClearInterval = () => {
-        setTimeout(() => {
-            c('.shot').style.left = initialShotLeft + "px";
-            c('.shot').style.top = initialShotTop + "px";
-            c('.shot').classList.remove('shotAnimation');
-            clearInterval(shotAnimInterval);
-        }, animationTime*1000);
+        c('.shot').style.left = initialShotLeft + "px";
+        c('.shot').style.top = initialShotTop + "px";
+        c('.shot').classList.remove('shotAnimation');
+        c('.shot').style.display = 'block';
+        clearInterval(shotAnimInterval);
     }
 
-    shotAnimClearInterval();
+    setTimeout(shotAnimClearInterval, animationTime*1000);
 }
 
 function verifyWin() {
     let duck = c('.duck').getBoundingClientRect();
     let shot = c('.shot').getBoundingClientRect();
     if(shot.left >= duck.left && shot.left <= duck.left+70-15 
-        && shot.top >= duck.top && shot.top <= duck.top+70-15) {
+        && shot.top >= duck.top && shot.top <= duck.top+80-15) {
+        score++;
+        c('.score span').innerHTML = score;
         clearInterval(duckAnimation);
-        shotAnimClearInterval();
+        if(score < 3) speed = 1;
+        else if(score < 7) speed = 2;
+        else if(score < 10) speed = 3;
+        else {
+            alert("VOCÊ GANHOU!!!");
+            clearInterval(duckAnimation);
+            speed = 0;
+        }
+        duckMove(speed);
+
+        c('.shot').style.display = 'none';
+        setTimeout(() => {
+            shotAnimClearInterval();
+        }, 100);
     }
 }
-
-/*
-let hit = false;
-while(!hit) {
-
-}
-*/
 
 c('body').addEventListener('mousedown', shoot);
