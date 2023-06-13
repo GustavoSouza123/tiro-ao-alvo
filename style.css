@@ -30,26 +30,44 @@
 
 .duck {
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 70px;
     height: 70px;
-    background-color: yellow;
+}
+
+.duck img {
+    height: inherit;
 }
 
 .gun {
     position: absolute;
     bottom: 10%;
     left: calc(50% - 50px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100px;
     height: 100px;
-    background-color: #000;
+}
+
+.gun img {
+    height: 130px;
 }
 
 .shot {
     position: absolute;
+    display: none;
+    align-items: center;
+    justify-content: center;
     width: 14px;
     height: 14px;
     border-radius: 50%;
-    background-color: #000;
+}
+
+.shot img {
+    height: 20px;
 }
 
 .shotAnimation {

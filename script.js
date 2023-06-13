@@ -33,20 +33,38 @@ function setCSSVariable(variable, value) {
     c(':root').style.setProperty(variable, value);
 }
 
+// get shot direction
+function getShotDirection(x, y){
+    var d = Math.atan2(x, y) * (180 / Math.PI);
+    if(d < 0) d = 180 - d;
+    return d;
+}
+
 // score
 let score = 0;
 
 // shoot the duck
 let initialShotLeft = parseInt((gameWidth/2) - 7);
 let initialShotTop = parseInt(gameHeight * 0.8);
-let finalShotLeft, finalShotTop, distance, animationTime, shotAnimInterval, shotAnimClearInterval;
+let finalShotLeft, finalShotTop, leftDistance, topDistance, distance, animationTime, rotation, shotAnimInterval, shotAnimClearInterval;
 c('.shot').style.left = initialShotLeft + "px";
 c('.shot').style.top = initialShotTop + "px";
 function shoot() {
+    c('.shot').style.display = 'flex';
+
     finalShotLeft = event.clientX-26;
     finalShotTop = event.clientY-26;
+
+    leftDistance = initialShotLeft-finalShotLeft;
+    topDistance = initialShotTop-finalShotTop
     distance = Math.sqrt((initialShotLeft-finalShotLeft)**2 + (initialShotTop-finalShotTop)**2);
     animationTime = distance / 800;
+
+    rotation = getShotDirection(leftDistance, topDistance);
+    rotation = (rotation > 180) ? rotation -= 180 : rotation *= -1;
+    c('.gun').style.transform = `rotate(${rotation}deg)`;
+    setTimeout(()=>{c('.gun').style.transform = `rotate(0deg)`;}, 300);
+    c('.shot').style.transform = `rotate(${rotation}deg)`;
 
     setCSSVariable('--initialLeft', (initialShotLeft)+'px');
     setCSSVariable('--initialTop', (initialShotTop)+'px');
@@ -61,7 +79,7 @@ function shoot() {
         c('.shot').style.left = initialShotLeft + "px";
         c('.shot').style.top = initialShotTop + "px";
         c('.shot').classList.remove('shotAnimation');
-        c('.shot').style.display = 'block';
+        c('.shot').style.display = 'none';
         clearInterval(shotAnimInterval);
     }
 
@@ -85,11 +103,7 @@ function verifyWin() {
             speed = 0;
         }
         duckMove(speed);
-
-        c('.shot').style.display = 'none';
-        setTimeout(() => {
-            shotAnimClearInterval();
-        }, 100);
+        shotAnimClearInterval();
     }
 }
 
