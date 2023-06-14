@@ -94,13 +94,20 @@ function verifyWin() {
         score++;
         c('.score span').innerHTML = score;
         clearInterval(duckAnimation);
+        c('.explosion').style.display = 'block';
+        c('.explosion').style.left = duck.left + 'px';
+        setTimeout(()=>{ c('.explosion').style.display = 'none'; }, 900);
+
         if(score < 3) speed = 1;
         else if(score < 7) speed = 2;
         else if(score < 10) speed = 3;
         else {
-            alert("VOCÊ GANHOU!!!");
             clearInterval(duckAnimation);
             speed = 0;
+            setTimeout(() => {
+                c('.victory').style.display = 'flex';
+                c('.game').style.backgroundColor = 'rgba(0, 0, 0, .5)';
+        }, 1000);
         }
         duckMove(speed);
         shotAnimClearInterval();
