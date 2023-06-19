@@ -62,7 +62,7 @@ function shoot() {
 
     rotation = getShotDirection(leftDistance, topDistance);
     rotation = (rotation > 180) ? rotation -= 180 : rotation *= -1;
-    c('.gun').style.transform = `rotate(${rotation}deg)`;
+    c('.gun').style.transform = `rotate(${rotation+90}deg)`;
     setTimeout(()=>{c('.gun').style.transform = `rotate(0deg)`;}, 300);
     c('.shot').style.transform = `rotate(${rotation}deg)`;
 
@@ -86,6 +86,7 @@ function shoot() {
     setTimeout(shotAnimClearInterval, animationTime*1000);
 }
 
+// verify duck death and victory (score = 10)
 function verifyWin() {
     let duck = c('.duck').getBoundingClientRect();
     let shot = c('.shot').getBoundingClientRect();
@@ -115,3 +116,10 @@ function verifyWin() {
 }
 
 c('body').addEventListener('mousedown', shoot);
+
+// play again
+function playAgain() {
+    location.reload();
+}
+
+c('.victory button').addEventListener('click', playAgain);
