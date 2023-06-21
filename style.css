@@ -3,6 +3,9 @@
     --initialTop: "0px";
     --finalLeft: "0px";
     --finalTop: "0px";
+    --orange: #ef8100;
+    --red: #f40840;
+    --blue: #2d9aa7
 }
 
 * {
@@ -20,29 +23,30 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    /* padding: 20px; */
 }
 
 .game {
     position: relative;
     width: 100%;
     height: 100%;
-    background-color: #eee;
+    background-color: var(--orange);
     overflow: hidden;
 }
 
-.score {
+.header {
     position: absolute;
     top: 0px;
     width: 100%;
     height: 70px;
+    background-color: var(--red);
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
     font-size: 24px;
 }
 
-.score span {
+.header span {
     font-weight: bold;
     margin-left: 10px;
 }
@@ -52,8 +56,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 70px;
-    height: 70px;
+    width: 120px;
+    height: 120px;
 }
 
 .duck img {
@@ -62,7 +66,7 @@
 
 .explosion {
     position: absolute;
-    top: 20%;
+    top: 25%;
     left: 0px;
     display: none;
 }
@@ -71,7 +75,7 @@
     height: 100px;
 }
 
-.gun {
+/*.gun {
     position: absolute;
     z-index: 99;
     bottom: 10%;
@@ -85,11 +89,11 @@
 
 .gun img {
     height: 130px;
-}
+}*/
 
 .shot {
     position: absolute;
-    display: none;
+    display: flex;
     align-items: center;
     justify-content: center;
     width: 14px;
@@ -98,7 +102,7 @@
 }
 
 .shot img {
-    height: 20px;
+    height: 70px;
 }
 
 .shotAnimation {
@@ -109,7 +113,7 @@
 .victory {
     position: absolute;
     z-index: 999;
-    top: 70px;
+    top: 110px;
     width: 100%;
     height: 60%;
     display: none;
@@ -118,15 +122,17 @@
 }
 
 .victory-content {
-    background-color: #fff;
+    background-color: var(--blue);
     background-size: cover;
     width: 80%;
+    max-width: 400px;
     height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    box-shadow: 0px 0px 32px 10px rgba(204,204,204,1);
+    box-shadow: 0px 0px 32px 10px rgb(168, 168, 168);
+    border-radius: 10px;
 }
 
 .victory p {
@@ -136,10 +142,11 @@
 }
 
 .victory button {
-    width: 130px;
-    height: 40px;
+    width: 150px;
+    height: 50px;
+    background-color: var(--orange);
     border: 1px solid #000;
-    border-radius: 10px;
+    border-radius: 30px;
     outline: none;
 }
 

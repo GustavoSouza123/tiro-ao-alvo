@@ -3,19 +3,19 @@ const cs = (e) => document.querySelectorAll(e);
 
 // game space size
 var game = c('.game').getBoundingClientRect();
-const gameWidth = game.width;
-const gameHeight = game.height;
+const gameWidth = parseInt(game.width);
+const gameHeight = parseInt(game.height);
 
 // duck move
 let duckAnimation;
 function duckMove(speed) {
-    let initialPos = -100;
+    let initialPos = -150;
     let duckLeft = initialPos;
     c('.duck').style.left = duckLeft + "px";
     c('.duck').style.top = (gameHeight/4.3) + "px";
     duckAnimation = setInterval(anim, 1);
     function anim() {
-        if(duckLeft == gameWidth-2 || duckLeft == gameWidth-1 || duckLeft == gameWidth || duckLeft == gameWidth+1 || duckLeft == gameWidth+2) {
+        if(duckLeft == gameWidth-3 || duckLeft == gameWidth-2 || duckLeft == gameWidth-1 || duckLeft == gameWidth || duckLeft == gameWidth+1 || duckLeft == gameWidth+2 || duckLeft == gameWidth+3) {
             duckLeft = initialPos;
             c('.duck').style.left = duckLeft + "px";
         } else {
@@ -47,10 +47,22 @@ let score = 0;
 let initialShotLeft = parseInt((gameWidth/2) - 7);
 let initialShotTop = parseInt(gameHeight * 0.8);
 let finalShotLeft, finalShotTop, leftDistance, topDistance, distance, animationTime, rotation, shotAnimInterval, shotAnimClearInterval;
+let profNum;
+let chances = 15;
 c('.shot').style.left = initialShotLeft + "px";
 c('.shot').style.top = initialShotTop + "px";
 function shoot() {
-    c('.shot').style.display = 'flex';
+    chances--;
+    c('.chances span').innerHTML = chances;
+    // defeat
+    if(chances == 0) {
+        clearInterval(duckAnimation);
+        speed = 0;
+        setTimeout(() => {
+            c('.victory').style.display = 'flex';
+            c('.victory-content p').innerHTML = "Você perdeu";
+        }, 500);
+    }
 
     finalShotLeft = event.clientX-26;
     finalShotTop = event.clientY-26;
@@ -62,8 +74,8 @@ function shoot() {
 
     rotation = getShotDirection(leftDistance, topDistance);
     rotation = (rotation > 180) ? rotation -= 180 : rotation *= -1;
-    c('.gun').style.transform = `rotate(${rotation+90}deg)`;
-    setTimeout(()=>{c('.gun').style.transform = `rotate(0deg)`;}, 300);
+    // c('.gun').style.transform = `rotate(${rotation+90}deg)`;
+    // setTimeout(()=>{c('.gun').style.transform = `rotate(0deg)`;}, 300);
     c('.shot').style.transform = `rotate(${rotation}deg)`;
 
     setCSSVariable('--initialLeft', (initialShotLeft)+'px');
@@ -78,8 +90,8 @@ function shoot() {
     shotAnimClearInterval = () => {
         c('.shot').style.left = initialShotLeft + "px";
         c('.shot').style.top = initialShotTop + "px";
+        c('.shot').style.transform = `rotate(0deg)`;
         c('.shot').classList.remove('shotAnimation');
-        c('.shot').style.display = 'none';
         clearInterval(shotAnimInterval);
     }
 
@@ -90,8 +102,8 @@ function shoot() {
 function verifyWin() {
     let duck = c('.duck').getBoundingClientRect();
     let shot = c('.shot').getBoundingClientRect();
-    if(shot.left >= duck.left && shot.left <= duck.left+70-15 
-        && shot.top >= duck.top && shot.top <= duck.top+80-15) {
+    if(shot.left >= duck.left && shot.left <= duck.left+100-15 
+        && shot.top >= duck.top && shot.top <= duck.top+110-15) {
         score++;
         c('.score span').innerHTML = score;
         clearInterval(duckAnimation);
@@ -103,12 +115,18 @@ function verifyWin() {
         else if(score < 7) speed = 2;
         else if(score < 10) speed = 3;
         else {
+            // victory
             clearInterval(duckAnimation);
             speed = 0;
             setTimeout(() => {
                 c('.victory').style.display = 'flex';
-                c('.game').style.backgroundColor = 'rgba(0, 0, 0, .5)';
-        }, 1000);
+                c('.victory-content p').innerHTML = "Você ganhou!!!";
+            }, 1000);
+        }
+
+        if(score >= 1) {
+            profNum = Math.floor(Math.random() * 7) + 1;
+            c('.duck img').src = `img/prof-og/prof${profNum}.png`;
         }
         duckMove(speed);
         shotAnimClearInterval();
